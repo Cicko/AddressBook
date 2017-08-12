@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/createAccount", (req, res) => {
-  //create a json response
+    //create a json response
     var requestAsJson = JSON.stringify(req.body);
 
     //set the appropriate HTTP header
@@ -23,7 +23,7 @@ app.post("/createAccount", (req, res) => {
 })
 
 app.get("/",(req, res) => {
-  res.send("HOLA POLLO")
+  res.send("On the root")
 });
 
 app.listen(3000);
