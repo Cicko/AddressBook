@@ -29,6 +29,7 @@ mongoose.createConnection(uri);
 //mongoose.connect("mongodb://localhost/srtv")
 
 app.post('/signup', (req, res) => {
+  console.log("in signup");
   User.findOne({ email: req.body.email}, (err, user) => {
     if (err || !user) {
       User.create({ email: req.body.email, password: req.body.password }, function (err, small) {
