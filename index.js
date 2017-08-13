@@ -30,7 +30,9 @@ mongoose.createConnection(uri);
 
 app.post('/signup', (req, res) => {
   console.log("in signup");
-  User.findOne({ email: req.body.email}, (err, user) => {
+  console.log(mongoose.connection.readyState);
+  console.log("Saw mongo state")
+  User.findOne({email: req.body.email}, (err, user) => {
     if (err || !user) {
       User.create({ email: req.body.email, password: req.body.password }, function (err, small) {
         if (err) return handleError(err);
@@ -41,7 +43,6 @@ app.post('/signup', (req, res) => {
     }
     else
       res.status(409).json({ message: "The user exists"});
-
     })
 })
 
