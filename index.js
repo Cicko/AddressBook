@@ -25,7 +25,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
-mongoose.connect("mongodb://heroku_fkcp7hp5:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5")
+var uri = 'mongodb://rudolfcicko:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5';
+mongoose.createConnection(uri);
 //mongoose.connect("mongodb://localhost/srtv")
 
 app.post('/signup', (req, res) => {
