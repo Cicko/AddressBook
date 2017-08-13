@@ -7,6 +7,7 @@
     "start": "node index.js",
     "test": "mocha"
   },
+  "engines": { "node" : ">=8.x.x" },
   "author": "",
   "license": "ISC",
   "dependencies": {
