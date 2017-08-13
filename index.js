@@ -19,7 +19,6 @@ var usersRef = rootRef.child('users');
 
 
 const SECRET = 'Rudolf Cicko want to work in prague'
-const PORT = process.env.PORT | 3000;
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -99,7 +98,7 @@ app.get("/",(req, res) => {
   res.redirect('/login');
 });
 
-app.listen(PORT, (err) => {
+app.listen(process.env.PORT || 5000, (err) => {
   console.log("Listing on port " + PORT);
 })
 
