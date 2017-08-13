@@ -9,7 +9,7 @@ var firebase = require('firebase');
 
 
 var firebaseApp = firebase.initializeApp({
-  serviceAccount: "./SRTV-AddressBook-fbd87286a56b.json",
+  serviceAccount: "./SRTV-AddressBook-5b5844595542.json",
     databaseURL: 'https://srtv-addressbook.firebaseio.com/'
 });
 
@@ -23,9 +23,9 @@ const PORT = process.env.PORT | 3000;
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup']}))
+app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
-mongoose.connect("mongodb://localhost/srtv")
+mongoose.connect("mongodb://rudolfcicko:rudolfcicko@ds063869.mlab.com:63869/heroku_fkcp7hp5")
 
 app.post('/signup', (req, res) => {
   User.findOne({ email: req.body.email}, (err, user) => {
@@ -43,6 +43,19 @@ app.post('/signup', (req, res) => {
     })
 })
 
+app.get('/accounts', (req, res) => {
+  User.find({}, (err, users) => {
+    res.json(users);
+  })
+});
+
+app.delete('/accounts', (req, res) => {
+  User.remove({},function(err,numberRemoved){
+       console.log("inside remove call back" + numberRemoved);
+       res.json({removed: numberRemoved});
+  });
+});
+
 app.post('/contacts', (req, res) => {
   var email = getEmailFromRequest(req);
   usersRef.child(adaptEmailForFirebase(email)).push(req.body)
@@ -52,7 +65,6 @@ app.post('/contacts', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  console.log("POIST LO_GIN");
   if (!req.body.email) {
     res.status(400).send('email required')
   }
