@@ -98,8 +98,10 @@ app.get("/",(req, res) => {
   res.redirect('/login');
 });
 
-app.listen(process.env.PORT || 5000, (err) => {
-  console.log("Listing on port " + PORT);
+
+var port = process.env.PORT || 5000
+app.listen(port, (err) => {
+  console.log("Listing on port " + port);
 })
 
 
