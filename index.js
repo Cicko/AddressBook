@@ -5,6 +5,26 @@ var expressJWT = require('express-jwt')
 var jwt = require('jsonwebtoken')
 var mongoose = require('mongoose');
 var User = require('./models/user.js')
+var firebase = require('firebase');
+
+
+var firebaseApp = firebase.initializeApp({
+  serviceAccount: "./SRTV-AddressBook-fbd87286a56b.json",
+    databaseURL: 'https://srtv-addressbook.firebaseio.com/'
+});
+
+
+var usersRef = firebaseApp.database().ref('users');
+
+// ,contacts : new Array({fullname: "ruda", phone: "+34 671356104"})
+
+  // Import Admin SDK
+/*var admin = require("firebase-admin");
+
+// Get a database reference to our blog
+var db = admin.database();
+var ref = db.ref("server/saving-data/fireblog");
+*/
 
 //var account = require('./routes/account')
 const SECRET = 'Rudolf Cicko want to work in prague'
@@ -23,6 +43,9 @@ app.post('/signup', (req, res) => {
         if (err) return handleError(err);
         else {
           res.status(201).json({message :"User created! Now you can log in."})
+          usersRef.push({
+            email: req.body.email.replace("@","at").replace(".","dot")
+          });
         }
       });
     }
@@ -35,7 +58,6 @@ app.post('/signup', (req, res) => {
 app.get('/contacts', (req, res) => {
   var decoded = jwt.decode(req.headers.authorization.split(" ")[1], SECRET);
   var email = decoded.username;
-
 
   res.status(200).json(email);
 });
