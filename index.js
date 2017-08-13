@@ -14,19 +14,10 @@ var firebaseApp = firebase.initializeApp({
 });
 
 
-var usersRef = firebaseApp.database().ref('users');
+var rootRef = firebaseApp.database().ref();
+var usersRef = rootRef.child('users');
 
-// ,contacts : new Array({fullname: "ruda", phone: "+34 671356104"})
 
-  // Import Admin SDK
-/*var admin = require("firebase-admin");
-
-// Get a database reference to our blog
-var db = admin.database();
-var ref = db.ref("server/saving-data/fireblog");
-*/
-
-//var account = require('./routes/account')
 const SECRET = 'Rudolf Cicko want to work in prague'
 const PORT = process.env.PORT | 3000;
 
@@ -43,9 +34,6 @@ app.post('/signup', (req, res) => {
         if (err) return handleError(err);
         else {
           res.status(201).json({message :"User created! Now you can log in."})
-          usersRef.push({
-            email: req.body.email.replace("@","at").replace(".","dot")
-          });
         }
       });
     }
@@ -55,11 +43,10 @@ app.post('/signup', (req, res) => {
     })
 })
 
-app.get('/contacts', (req, res) => {
-  var decoded = jwt.decode(req.headers.authorization.split(" ")[1], SECRET);
-  var email = decoded.username;
-
-  res.status(200).json(email);
+app.post('/contacts', (req, res) => {
+  var email = getEmailFromRequest(req);
+  usersRef.child(adaptEmailForFirebase(email)).push(req.body)
+  res.status(201).json({message : "Contact added for " + email});
 });
 
 
@@ -101,6 +88,15 @@ app.get("/",(req, res) => {
 app.listen(PORT, (err) => {
   console.log("Listing on port " + PORT);
 })
+
+
+function getEmailFromRequest(req) {
+  return jwt.decode(req.headers.authorization.split(" ")[1], SECRET).username;
+}
+
+function adaptEmailForFirebase(email) {
+  return email.replace("@","at").replace(".","dot");
+}
 
 
 module.exports = app
