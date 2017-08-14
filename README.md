@@ -24,5 +24,13 @@ The addressbook backend is used by your users to perform the following tasks:
 
 ## Contact data
  - All the user's contacts are stored in Firebase.
- - With the api you just can create new contact.
+ - With the api you just can create new contact using token (more info in Documentation).
  - GET, UPDATE or DELETE contacts are done directly in the Firebase dashboard.
+
+
+## Links
+
+ - [Heroku link](https://addressbook-rudy.herokuapp.com)
+ - [MongoDB](https://www.mlab.com/databases/heroku_fkcp7hp5)
+   -  User: guest
+   -  Password: guest
