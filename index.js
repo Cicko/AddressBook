@@ -17,6 +17,8 @@ var uri = process.env.MONGODB_URI || "mongodb://rudolfcicko:rudolfcicko23@ds0638
 mongoose.connect(uri)
 
 
+var port = process.env.PORT || 5000
+module.exports = port;
 
 var rootRef = firebaseApp.database().ref()
 var usersRef = rootRef.child('users')
@@ -121,7 +123,6 @@ app.get("/",(req, res) => {
 });
 
 
-var port = process.env.PORT || 5000
 app.listen(port, (err) => {
   console.log("Listing on port " + port);
 })
