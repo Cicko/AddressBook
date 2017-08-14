@@ -26,32 +26,35 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
 var uri = process.env.MONGODB_URI || "mongodb://rudolfcicko:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5"
-
-console.log("URI IS " + uri );
-
-//var uri = 'mongodb://heroku_fkcp7hp5:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5';
-//var uri = "mongodb://localhost";
-//mongoose.createConnection(uri);
-//MongoClientConnect(uri).then(db => {});
 mongoose.connect(uri)
 
 
 app.post('/signup', (req, res) => {
-  console.log("in signup");
-  console.log(mongoose.connection.readyState);
-  console.log("Saw mongo state")
-  User.findOne({email: req.body.email}, (err, user) => {
-    if (err || !user) {
-      User.create({ email: req.body.email, password: req.body.password }, function (err, small) {
-        if (err) return handleError(err);
-        else {
-          res.status(201).json({message :"User created! Now you can log in."})
-        }
-      });
-    }
-    else
-      res.status(409).json({ message: "The user exists"});
-    })
+  if (!mongoose.connection.readyState)
+    res.status(503).json({message: "ERROR: Database connection not stablished"});
+  if (!(/(?=.*[A-Z])(?=.*[!@#$&_'¡?¿*])(?=.*[0-9])(?=.*[a-z]).{8}/.test(req.body.password))) {
+    res.status(406).json({message: "Password is not strong enough", rules: {
+      1: "It must contain at least one uppercase letter",
+      2: "It must contain at least one lowercase letter",
+      3: "It must contain at least one numeric digit",
+      4: "It must contain at least one special symbol from among: !@#$&_'¡?¿",
+      5: "Password length must be at least 8 characters"
+    }})
+  }
+  else {
+    User.findOne({email: req.body.email}, (err, user) => {
+      if (err || !user) {
+        User.create({ email: req.body.email, password: req.body.password }, function (err, small) {
+          if (err) return handleError(err);
+          else {
+            res.status(201).json({message :"User created! Now you can log in."})
+          }
+        });
+      }
+      else
+        res.status(409).json({ message: "The user exists"});
+      })
+  }
 })
 
 app.get('/accounts', (req, res) => {
