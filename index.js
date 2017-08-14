@@ -24,9 +24,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
+var uri = process.env.MONGODB_URI;
+
 //var uri = 'mongodb://heroku_fkcp7hp5:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5';
 //var uri = "mongodb://localhost";
-//mongoose.createConnection(uri);
+mongoose.createConnection(uri);
 //MongoClientConnect(uri).then(db => {});
 //mongoose.connect("mongodb://localhost/srtv")
 
