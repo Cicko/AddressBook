@@ -2,10 +2,15 @@ var chai = require('chai');
 var request = require('request');
 var expect = chai.expect;
 
+const PORT = process.env.PORT || 5000;
+
 describe("Testing accounts", () => {
-  it("Can create account", done => {
+  afterEach(function() {
+    request.delete({url: 'http://localhost:' + PORT + '/accounts'})
+  });
+  it("Can create account", (done) => {
     request.post({
-      url:'http://localhost:' + process.env.PORT + '/signup',
+      url:'http://localhost:' + PORT + '/signup',
       form: {
         email: "test@gmail.com",
         password: "1234ABCabc$"
@@ -19,7 +24,7 @@ describe("Testing accounts", () => {
 
   it("Can not create account with a password not strong enough", done => {
     request.post({
-      url:'http://localhost:' + process.env.PORT + '/signup',
+      url:'http://localhost:' + PORT + '/signup',
       form: {
         email: "test@gmail.com",
         password: "1234"
@@ -32,19 +37,19 @@ describe("Testing accounts", () => {
   });
 
   afterEach(() => {
-    request.delete({url: 'http://localhost:' + process.env.PORT + '/accounts'})
+    request.delete({url: 'http://localhost:' + PORT + '/accounts'})
   });
 });
 
 
 describe("Testing login", () => {
   afterEach(function() {
-    request.delete({url: 'http://localhost:' + process.env.PORT + '/accounts'})
+    request.delete({url: 'http://localhost:' + PORT + '/accounts'})
   });
 
   it("Can check correct login", done => {
     request.post({
-      url:'http://localhost:' + process.env.PORT + '/signup',
+      url:'http://localhost:' + PORT + '/signup',
       form: {
         email: "test@gmail.com",
         password: "1234ABCabc$"
@@ -52,7 +57,7 @@ describe("Testing login", () => {
     },
     (err,httpResponse,body) => {
       request.post({
-        url:'http://localhost:' + process.env.PORT + '/login',
+        url:'http://localhost:' + PORT + '/login',
         form: {
           email: "test@gmail.com",
           password: "1234ABCabc$"
@@ -66,7 +71,7 @@ describe("Testing login", () => {
 
   it("Can check incorrect password when login", done => {
     request.post({
-      url:'http://localhost:' + process.env.PORT + '/signup',
+      url:'http://localhost:' + PORT + '/signup',
       form: {
         email: "test2@gmail.com",
         password: "1234ABCabc$"
@@ -74,7 +79,7 @@ describe("Testing login", () => {
     },
     (err,httpResponse,body) => {
       request.post({
-        url:'http://localhost:' + process.env.PORT + '/login',
+        url:'http://localhost:' + PORT + '/login',
         form: {
           email: "test2@gmail.com",
           password: "1234"
@@ -88,7 +93,7 @@ describe("Testing login", () => {
 
   it("Can check if user don't exist", done => {
     request.post({
-      url:'http://localhost:' + process.env.PORT + '/login',
+      url:'http://localhost:' + PORT + '/login',
       form: {
         email: "test@gmail.com",
         password: "1234ABCabc$"
@@ -106,7 +111,7 @@ describe("Testing login", () => {
 describe("Testing contacts", () => {
     it ("Can create contact", done => {
       request.post({
-        url:'http://localhost:' + process.env.PORT + '/signup',
+        url:'http://localhost:' + PORT + '/signup',
         form: {
           email: "test@gmail.com",
           password: "1234ABCabc$"
@@ -114,7 +119,7 @@ describe("Testing contacts", () => {
       },
       (err,httpResponse,body) => {
         request.post({
-          url:'http://localhost:' + process.env.PORT + '/login',
+          url:'http://localhost:' + PORT + '/login',
           form: {
             email: "test@gmail.com",
             password: "1234ABCabc$"
@@ -122,7 +127,7 @@ describe("Testing contacts", () => {
         }, (err, res, body) => {
           var token = JSON.parse(body).token;
           request.post({
-            url: 'http://localhost:' + process.env.PORT + '/contacts',
+            url: 'http://localhost:' + PORT + '/contacts',
             headers: {
               'Authorization': 'Bearer ' + token
             },

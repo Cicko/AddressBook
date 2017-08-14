@@ -19,6 +19,7 @@
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
     "firebase": "^4.2.0",
+    "firebase-admin": "^5.1.0",
     "jsonwebtoken": "^7.4.2",
     "mongo-client-connect": "^1.0.6",
     "mongodb": "^2.2.31",
