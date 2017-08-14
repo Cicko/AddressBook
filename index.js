@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var expressJWT = require('express-jwt')
 var jwt = require('jsonwebtoken')
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 var User = require('./models/user.js')
 var firebase = require('firebase');
 var MongoClientConnect = require('mongo-client-connect');
@@ -24,13 +25,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
-var uri = process.env.MONGODB_URI;
+var uri = process.env.MONGODB_URI || "mongodb://rudolfcicko:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5"
+
+console.log("URI IS " + uri );
 
 //var uri = 'mongodb://heroku_fkcp7hp5:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5';
 //var uri = "mongodb://localhost";
-mongoose.createConnection(uri);
+//mongoose.createConnection(uri);
 //MongoClientConnect(uri).then(db => {});
-//mongoose.connect("mongodb://localhost/srtv")
+mongoose.connect(uri)
 
 
 app.post('/signup', (req, res) => {
