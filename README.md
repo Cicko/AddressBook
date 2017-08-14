@@ -32,5 +32,5 @@ The addressbook backend is used by your users to perform the following tasks:
 
  - [Heroku link](https://addressbook-rudy.herokuapp.com)
  - [MongoDB](https://www.mlab.com/databases/heroku_fkcp7hp5)
-   -  User: guest
-   -  Password: guest
+   -  DB User: guest
+   -  DB Password: guest
