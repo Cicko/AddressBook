@@ -16,11 +16,13 @@ module.exports = function(app) {
     .post(contactsController.createContact);
 
   app.get("/",(req, res) => {
-    res.status(200).json({paths: {
+    res.redirect('https://documenter.getpostman.com/view/2536086/addressbook-srtv/6n61Dfv')
+    /*res.status(200).json({paths: {
       '/signup': 'Create an account',
       '/login': 'Log in',
       '/contacts': 'Create a contact for specific account'
     }});
+    */
   });
 
 }
