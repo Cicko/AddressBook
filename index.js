@@ -3,20 +3,23 @@ const app = express()
 var bodyParser = require('body-parser')
 var expressJWT = require('express-jwt')
 var jwt = require('jsonwebtoken')
-var mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
 var User = require('./models/user.js')
 var firebase = require('firebase');
-var MongoClientConnect = require('mongo-client-connect');
+var mongoose = require('mongoose');
 
 var firebaseApp = firebase.initializeApp({
   serviceAccount: "./SRTV-AddressBook-5b5844595542.json",
-    databaseURL: 'https://srtv-addressbook.firebaseio.com/'
+  databaseURL: 'https://srtv-addressbook.firebaseio.com/'
 });
 
+mongoose.Promise = require('bluebird');
+var uri = process.env.MONGODB_URI || "mongodb://rudolfcicko:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5"
+mongoose.connect(uri)
 
-var rootRef = firebaseApp.database().ref();
-var usersRef = rootRef.child('users');
+
+
+var rootRef = firebaseApp.database().ref()
+var usersRef = rootRef.child('users')
 
 
 const SECRET = 'Rudolf Cicko want to work in prague'
@@ -25,8 +28,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
-var uri = process.env.MONGODB_URI || "mongodb://rudolfcicko:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5"
-mongoose.connect(uri)
 
 
 app.post('/signup', (req, res) => {
@@ -72,8 +73,16 @@ app.delete('/accounts', (req, res) => {
 
 app.post('/contacts', (req, res) => {
   var email = getEmailFromRequest(req);
-  usersRef.child(adaptEmailForFirebase(email)).push(req.body)
-  res.status(201).json({message : "Contact added for " + email});
+  User.findOne({ email: email}, (err, user) => {
+    if (err) console.log(err);
+    if (user) {
+      usersRef.child(adaptEmailForFirebase(email)).push(req.body)
+      res.status(201).json({message : "Contact added for " + email});
+    }
+    else if (user == null) {
+      res.status(404).json({ message: "This user doesn't exist"});
+    }
+  });
 });
 
 
