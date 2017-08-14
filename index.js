@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken')
 var mongoose = require('mongoose');
 var User = require('./models/user.js')
 var firebase = require('firebase');
-
+var MongClientConnect = require('mongo-client-connect');
 
 var firebaseApp = firebase.initializeApp({
   serviceAccount: "./SRTV-AddressBook-5b5844595542.json",
@@ -25,7 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressJWT({secret: SECRET}).unless({ path : ['/login','/signup','/accounts']}))
 
 var uri = 'mongodb://heroku_fkcp7hp5:rudolfcicko23@ds063869.mlab.com:63869/heroku_fkcp7hp5';
-mongoose.createConnection(uri);
+//mongoose.createConnection(uri);
+MongoClientConnect(uri).then(db => {});
 //mongoose.connect("mongodb://localhost/srtv")
 
 app.post('/signup', (req, res) => {

@@ -7,7 +7,9 @@
     "start": "node index.js",
     "test": "mocha"
   },
-  "engines": { "node" : ">=8.x.x" },
+  "engines": {
+    "node": ">=8.x.x"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -17,6 +19,7 @@
     "express-jwt": "^5.3.0",
     "firebase": "^4.2.0",
     "jsonwebtoken": "^7.4.2",
+    "mongo-client-connect": "^1.0.6",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.6",
     "pg": "^6.4.2",
